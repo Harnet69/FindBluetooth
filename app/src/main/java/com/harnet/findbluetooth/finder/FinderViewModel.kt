@@ -19,11 +19,11 @@ class FinderViewModel : ViewModel() {
     private fun searchDevices() {
         mIsSearching.value = true
         coroutineScope.launch {
-            val newDevicesList = arrayListOf<Device>(
-                Device("testDevice1"),
-                Device("testDevice2"),
-                Device("testDevice3"),
-            )
+            val newDevicesList = arrayListOf<Device>()
+            newDevicesList.add(Device("testDevice1"))
+            newDevicesList.add(Device("testDevice2"))
+            newDevicesList.add(Device("testDevice3"))
+
             delay(2000L)
             coroutineScope.launch(Dispatchers.Main) {
                 if (newDevicesList.isNotEmpty()) {
