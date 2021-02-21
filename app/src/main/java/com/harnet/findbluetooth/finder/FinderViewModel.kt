@@ -1,4 +1,4 @@
-package com.harnet.findbluetooth
+package com.harnet.findbluetooth.finder
 
 import androidx.lifecycle.ViewModel
 
