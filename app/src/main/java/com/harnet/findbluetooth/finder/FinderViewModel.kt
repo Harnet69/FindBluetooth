@@ -25,6 +25,7 @@ class FinderViewModel : ViewModel() {
             newDevicesList.add(Device("testDevice3"))
 
             delay(2000L)
+
             coroutineScope.launch(Dispatchers.Main) {
                 if (newDevicesList.isNotEmpty()) {
                     mDeviceList.value = newDevicesList
