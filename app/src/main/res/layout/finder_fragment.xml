@@ -21,21 +21,22 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/search_status"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Searching"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            android:text="@string/finder_searching"
+            app:layout_constraintBottom_toTopOf="@+id/btn_search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
+            android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="Button"
+            android:text="@string/finder_btn_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

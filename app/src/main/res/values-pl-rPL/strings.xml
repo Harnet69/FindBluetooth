@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Znajdż bluetooth</string>
+    <string name="finder_btn_search">Szukaj</string>
+    <string name="finder_searching">Wyszukiwanie...</string>
+</resources>
