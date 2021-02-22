@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import com.harnet.findbluetooth.model.Device
 
 class BroadcastHelper {
@@ -19,6 +20,8 @@ class BroadcastHelper {
         addActionToIntent()
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
+                val action = intent.action
+                Log.i("ActionXXX", action.toString())
                 //TODO here will be new devices getting!!!
                 val newDevices = arrayListOf<Device>(Device("TEst device"), Device("TEst device 2"))
                 broadcastListener.onNewDevices(newDevices)
