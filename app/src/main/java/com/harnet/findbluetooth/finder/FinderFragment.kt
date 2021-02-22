@@ -1,10 +1,16 @@
 package com.harnet.findbluetooth.finder
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,12 +18,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harnet.findbluetooth.R
 import com.harnet.findbluetooth.databinding.FinderFragmentBinding
+import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
+
 
 class FinderFragment : Fragment() {
     private lateinit var viewModel: FinderViewModel
     private lateinit var dataBinding: FinderFragmentBinding
     private lateinit var finderAdapter: FinderAdapter
+    private val broadcastHelper = BroadcastHelper()
+
+    var bluetoothAdapter: BluetoothAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,6 +36,8 @@ class FinderFragment : Fragment() {
     ): View {
         viewModel = ViewModelProvider(this).get(FinderViewModel::class.java)
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.finder_fragment, container, false)
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
         return dataBinding.root
     }
@@ -36,6 +49,7 @@ class FinderFragment : Fragment() {
         observeViewModel()
 
         dataBinding.finderBtnSearch.setOnClickListener {
+            bluetoothAdapter?.startDiscovery()
             viewModel.refresh()
         }
 
@@ -97,5 +111,15 @@ class FinderFragment : Fragment() {
         dataBinding.finderErrorMsg.text = eMsg
         dataBinding.finderErrorMsg.visibility = View.VISIBLE
         dataBinding.finderBtnSearch.isClickable = true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        activity?.registerReceiver(broadcastHelper.broadcastReceiver, broadcastHelper.intentFilter)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        activity?.unregisterReceiver(broadcastHelper.broadcastReceiver)
     }
 }
