@@ -1,12 +1,13 @@
 package com.harnet.findbluetooth.finder
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.harnet.findbluetooth.BaseViewModel
 import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FinderViewModel(application: Application) : BaseViewModel(application) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -30,41 +31,30 @@ class FinderViewModel(application: Application) : BaseViewModel(application) {
         coroutineScope.launch {
             //TODO start to look at for bluetooth devices
             broadcastHelper.bluetoothAdapter?.startDiscovery()
-
-            val newDevicesList = arrayListOf<Device>()
-            newDevicesList.add(Device("testDevice1"))
-            newDevicesList.add(Device("testDevice2"))
-            newDevicesList.add(Device("testDevice3"))
-
-            delay(2000L)
-
-            coroutineScope.launch(Dispatchers.Main) {
-                if (newDevicesList.isNotEmpty()) {
-                    mDeviceList.value = newDevicesList
-                } else {
-                    mIsSearching.value = false
-                    mSearchingError.value = "No device find"
-                }
-            }
         }
     }
 
-    fun registerReceiver(){
+    fun registerReceiver() {
         getApplication<Application>().registerReceiver(
             broadcastHelper.broadcastReceiver,
             broadcastHelper.intentFilter
         )
     }
 
-    fun unRegisterReceiver(){
+    fun unRegisterReceiver() {
         getApplication<Application>().unregisterReceiver(broadcastHelper.broadcastReceiver)
     }
 
-
+    // listen to new bluetooth devices
     private fun getBroadcastListenerListener(): BroadcastHelper.BroadcastListener {
         return object : BroadcastHelper.BroadcastListener {
             override fun onNewDevices(newDevices: ArrayList<Device>) {
-                Log.i("newnewDev", "onNewDevices: $newDevices")
+                if (newDevices.isNotEmpty()) {
+                    mDeviceList.value = newDevices
+                } else {
+                    mIsSearching.value = false
+                    mSearchingError.value = "No device find"
+                }
             }
         }
     }

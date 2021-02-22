@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
 import com.harnet.findbluetooth.model.Device
 
 class BroadcastHelper {
@@ -20,9 +19,18 @@ class BroadcastHelper {
         addActionToIntent()
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
-                actionWhenReceive(context, intent)
+                //TODO here will be new devices getting!!!
+                val newDevices = arrayListOf<Device>(Device("TEst device"), Device("TEst device 2"))
+                broadcastListener.onNewDevices(newDevices)
             }
         }
+    }
+
+    private fun addActionToIntent() {
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND)
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
     }
 
     interface BroadcastListener {
@@ -32,25 +40,4 @@ class BroadcastHelper {
     fun setListener(l: BroadcastListener) {
         broadcastListener = l
     }
-
-    private fun addActionToIntent(){
-        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
-        intentFilter.addAction(BluetoothDevice.ACTION_FOUND)
-        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-    }
-
-    private fun actionWhenReceive(context: Context?, intent: Intent){
-        val action = intent.action
-        Log.i("AcXXXtion", action.toString())
-
-        //TODO get new Devices
-        val newDevices = arrayListOf<Device>()
-        broadcastListener.onNewDevices(newDevices)
-//            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-//                statusTextView.setText("Finished")
-//                searchButton.setEnabled(true)
-//            }
-    }
-
 }
