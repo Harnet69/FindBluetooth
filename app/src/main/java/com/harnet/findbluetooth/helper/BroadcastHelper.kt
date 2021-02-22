@@ -9,26 +9,33 @@ import android.content.IntentFilter
 import android.util.Log
 
 class BroadcastHelper {
-    var bluetoothAdapter: BluetoothAdapter? = null
+    var bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     var intentFilter: IntentFilter = IntentFilter()
-    val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action = intent.action
-            Log.i("AcXXXtion", action.toString())
-//            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-//                statusTextView.setText("Finished")
-//                searchButton.setEnabled(true)
-//            }
+    var broadcastReceiver: BroadcastReceiver
+
+    init {
+        addActionToIntent()
+        broadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent) {
+                actionWhenReceive(context, intent)
+            }
         }
     }
 
-    init {
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-
+    private fun addActionToIntent(){
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND)
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+    }
+
+    private fun actionWhenReceive(context: Context?, intent: Intent){
+        val action = intent.action
+        Log.i("AcXXXtion", action.toString())
+//            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
+//                statusTextView.setText("Finished")
+//                searchButton.setEnabled(true)
+//            }
     }
 
 }
