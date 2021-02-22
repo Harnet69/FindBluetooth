@@ -1,9 +1,8 @@
 package com.harnet.findbluetooth.finder
 
-import android.app.Activity
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.harnet.findbluetooth.BaseViewModel
 import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
@@ -16,6 +15,11 @@ class FinderViewModel(application: Application) : BaseViewModel(application) {
     val mDeviceList = MutableLiveData<ArrayList<Device>>()
     val mIsSearching = MutableLiveData<Boolean>()
     val mSearchingError = MutableLiveData<String>()
+
+    init {
+        val bl = getBroadcastListenerListener()
+        broadcastHelper.setListener(bl)
+    }
 
     fun refresh() {
         searchDevices()
@@ -46,11 +50,23 @@ class FinderViewModel(application: Application) : BaseViewModel(application) {
     }
 
     fun registerReceiver(){
-        getApplication<Application>().registerReceiver(broadcastHelper.broadcastReceiver, broadcastHelper.intentFilter)
+        getApplication<Application>().registerReceiver(
+            broadcastHelper.broadcastReceiver,
+            broadcastHelper.intentFilter
+        )
     }
 
     fun unRegisterReceiver(){
         getApplication<Application>().unregisterReceiver(broadcastHelper.broadcastReceiver)
+    }
+
+
+    private fun getBroadcastListenerListener(): BroadcastHelper.BroadcastListener {
+        return object : BroadcastHelper.BroadcastListener {
+            override fun onNewDevices(newDevices: ArrayList<Device>) {
+                Log.i("newnewDev", "onNewDevices: $newDevices")
+            }
+        }
     }
 
 }
