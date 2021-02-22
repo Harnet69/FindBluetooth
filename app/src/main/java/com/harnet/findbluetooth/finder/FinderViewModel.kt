@@ -1,12 +1,17 @@
 package com.harnet.findbluetooth.finder
 
+import android.app.Activity
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.harnet.findbluetooth.BaseViewModel
+import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
 import kotlinx.coroutines.*
 
-class FinderViewModel : ViewModel() {
+class FinderViewModel(application: Application) : BaseViewModel(application) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val broadcastHelper = BroadcastHelper()
 
     val mDeviceList = MutableLiveData<ArrayList<Device>>()
     val mIsSearching = MutableLiveData<Boolean>()
@@ -19,6 +24,9 @@ class FinderViewModel : ViewModel() {
     private fun searchDevices() {
         mIsSearching.value = true
         coroutineScope.launch {
+            //TODO start to look at for bluetooth devices
+            broadcastHelper.bluetoothAdapter?.startDiscovery()
+
             val newDevicesList = arrayListOf<Device>()
             newDevicesList.add(Device("testDevice1"))
             newDevicesList.add(Device("testDevice2"))
@@ -35,6 +43,14 @@ class FinderViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun registerReceiver(){
+        getApplication<Application>().registerReceiver(broadcastHelper.broadcastReceiver, broadcastHelper.intentFilter)
+    }
+
+    fun unRegisterReceiver(){
+        getApplication<Application>().unregisterReceiver(broadcastHelper.broadcastReceiver)
     }
 
 }

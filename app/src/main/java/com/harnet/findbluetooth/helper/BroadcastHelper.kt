@@ -9,8 +9,8 @@ import android.content.IntentFilter
 import android.util.Log
 
 class BroadcastHelper {
+    var bluetoothAdapter: BluetoothAdapter? = null
     var intentFilter: IntentFilter = IntentFilter()
-
     val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
             val action = intent.action
@@ -23,6 +23,8 @@ class BroadcastHelper {
     }
 
     init {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND)
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)

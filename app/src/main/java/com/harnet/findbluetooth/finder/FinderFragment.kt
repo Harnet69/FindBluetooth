@@ -21,14 +21,10 @@ import com.harnet.findbluetooth.databinding.FinderFragmentBinding
 import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
 
-
 class FinderFragment : Fragment() {
     private lateinit var viewModel: FinderViewModel
     private lateinit var dataBinding: FinderFragmentBinding
     private lateinit var finderAdapter: FinderAdapter
-    private val broadcastHelper = BroadcastHelper()
-
-    var bluetoothAdapter: BluetoothAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +32,6 @@ class FinderFragment : Fragment() {
     ): View {
         viewModel = ViewModelProvider(this).get(FinderViewModel::class.java)
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.finder_fragment, container, false)
-
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
         return dataBinding.root
     }
@@ -49,7 +43,6 @@ class FinderFragment : Fragment() {
         observeViewModel()
 
         dataBinding.finderBtnSearch.setOnClickListener {
-            bluetoothAdapter?.startDiscovery()
             viewModel.refresh()
         }
 
@@ -100,7 +93,6 @@ class FinderFragment : Fragment() {
         dataBinding.finderLoadProgressBar.visibility = View.INVISIBLE
         dataBinding.finderBtnSearch.isClickable = true
         finderAdapter.updateDevicesList(devicesList)
-//        Toast.makeText(context, devicesList.toString(), Toast.LENGTH_LONG).show()
     }
 
     // when en error occur
@@ -115,11 +107,11 @@ class FinderFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        activity?.registerReceiver(broadcastHelper.broadcastReceiver, broadcastHelper.intentFilter)
+        viewModel.registerReceiver()
     }
 
     override fun onStop() {
         super.onStop()
-        activity?.unregisterReceiver(broadcastHelper.broadcastReceiver)
+        viewModel.unRegisterReceiver()
     }
 }
