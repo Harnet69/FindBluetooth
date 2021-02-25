@@ -42,7 +42,9 @@ class FinderFragment : Fragment() {
 
         observeViewModel()
 
+        // start searching
         dataBinding.finderBtnSearch.setOnClickListener {
+            inSearch()
             viewModel.refresh()
         }
 

@@ -29,8 +29,8 @@ class FinderViewModel(application: Application) : BaseViewModel(application) {
     private fun searchDevices() {
         mIsSearching.value = true
         coroutineScope.launch {
-            //TODO start to look at for bluetooth devices
-            broadcastHelper.bluetoothAdapter?.startDiscovery()
+            //start to look at for bluetooth devices
+            broadcastHelper.searchDevices()
         }
     }
 

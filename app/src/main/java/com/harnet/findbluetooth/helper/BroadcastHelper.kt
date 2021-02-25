@@ -27,6 +27,11 @@ class BroadcastHelper {
         }
     }
 
+    fun searchDevices(){
+        newDevices.clear()
+        bluetoothAdapter?.startDiscovery()
+    }
+
     private fun addActionToIntent() {
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND)
@@ -44,15 +49,19 @@ class BroadcastHelper {
 
     private fun whenReceived(intent: Intent) {
         val action = intent.action
-//        newDevices.clear()
         if (BluetoothDevice.ACTION_FOUND == action) {
             val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
             val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
-            if(device?.name.toString() != "null"){
+            if(device?.name.toString() != "null" && !isDeviceInList(device?.address.toString(), newDevices)){
                 newDevices.add(Device(device?.name, device?.address, rssi.toInt()))
             }
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
             broadcastListener.onNewDevices(newDevices)
         }
+    }
+
+    //check if device in list
+    private fun isDeviceInList(deviceAddress: String, devicesList: ArrayList<Device>): Boolean{
+        return devicesList.any { device -> device.address == deviceAddress }
     }
 }
