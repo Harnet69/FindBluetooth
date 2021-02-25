@@ -44,15 +44,14 @@ class BroadcastHelper {
 
     private fun whenReceived(intent: Intent) {
         val action = intent.action
+//        newDevices.clear()
         if (BluetoothDevice.ACTION_FOUND == action) {
             val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
             val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
-            Log.i("ActionXXX", "whenReceived: ${device?.type}")
-            newDevices.add(Device(device?.name, device?.address, rssi.toInt()))
-
+            if(device?.name.toString() != "null"){
+                newDevices.add(Device(device?.name, device?.address, rssi.toInt()))
+            }
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED == action) {
-//            val newDevices = arrayListOf<Device>(Device("TEst device"), Device("TEst device 2"))
-            Log.i("ActionXXX", "whenReceived: $newDevices")
             broadcastListener.onNewDevices(newDevices)
         }
     }

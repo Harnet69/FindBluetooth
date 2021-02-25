@@ -13,11 +13,29 @@
 
         <TextView
             android:id="@+id/item_deviceName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:gravity="center_vertical"
             android:textSize="20sp"
             android:text="@{device.name}" />
+
+        <TextView
+            android:id="@+id/item_deviceAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="@{device.address}" />
+
+        <TextView
+            android:id="@+id/item_deviceSignal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:text="@{Integer.toString(device.signal)}" />
     </LinearLayout>
 </layout>
