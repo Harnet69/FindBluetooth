@@ -1,16 +1,13 @@
 package com.harnet.findbluetooth.finder
 
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,7 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.harnet.findbluetooth.R
 import com.harnet.findbluetooth.databinding.FinderFragmentBinding
-import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
 
 class FinderFragment : Fragment() {
@@ -44,8 +40,23 @@ class FinderFragment : Fragment() {
 
         // start searching
         dataBinding.finderBtnSearch.setOnClickListener {
-            inSearch()
-            viewModel.refresh()
+            if (context?.let { context ->
+                    ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                } == PackageManager.PERMISSION_GRANTED) {
+                inSearch()
+                viewModel.refresh()
+            } else {
+                //ask for permission
+                activity?.let { activity ->
+                    ActivityCompat.requestPermissions(
+                        activity,
+                        arrayListOf(Manifest.permission.ACCESS_COARSE_LOCATION).toTypedArray(), 101
+                    )
+                }
+            }
         }
 
         dataBinding.finderDevicesList.apply {

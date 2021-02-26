@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
 import com.harnet.findbluetooth.model.Device
 
 class BroadcastHelper {
@@ -22,7 +21,7 @@ class BroadcastHelper {
         addActionToIntent()
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
-                whenReceived(intent)
+                onReceived(intent)
             }
         }
     }
@@ -47,7 +46,7 @@ class BroadcastHelper {
         broadcastListener = l
     }
 
-    private fun whenReceived(intent: Intent) {
+    private fun onReceived(intent: Intent) {
         val action = intent.action
         if (BluetoothDevice.ACTION_FOUND == action) {
             val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
@@ -60,7 +59,7 @@ class BroadcastHelper {
         }
     }
 
-    //check if device in list
+    //check if device with an address is in s list
     private fun isDeviceInList(deviceAddress: String, devicesList: ArrayList<Device>): Boolean{
         return devicesList.any { device -> device.address == deviceAddress }
     }
