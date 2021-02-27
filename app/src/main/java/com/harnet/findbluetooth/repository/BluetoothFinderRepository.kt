@@ -2,11 +2,13 @@ package com.harnet.findbluetooth.repository
 
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
 
 class BluetoothFinderRepository {
     private val broadcastHelper = BroadcastHelper()
+    val mDevicesList = MutableLiveData<ArrayList<Device>>()
 
     init {
         broadcastHelper.setListener(getBroadcastListener())
@@ -31,14 +33,8 @@ class BluetoothFinderRepository {
     private fun getBroadcastListener(): BroadcastHelper.BroadcastListener {
         return object : BroadcastHelper.BroadcastListener {
             override fun onNewDevices(newDevices: ArrayList<Device>) {
-                if (newDevices.isNotEmpty()) {
-                    Log.i("ActionXXX", "onNewDevices: $newDevices")
-//                    mDeviceList.value = newDevices
-                } else {
-                    Log.i("ActionXXX", "onNewDevices: No Device Found")
-//                    mIsSearching.value = false
-//                    mSearchingError.value = "No device find"
-                }
+                Log.i("ActionXXX", "onNewDevices: $newDevices")
+                mDevicesList.value = newDevices
             }
         }
     }

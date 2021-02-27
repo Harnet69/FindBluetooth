@@ -47,7 +47,7 @@ class FinderFragment : Fragment() {
                     )
                 } == PackageManager.PERMISSION_GRANTED) {
                 inSearch()
-                viewModel.refresh()
+                viewModel.refresh(this)
             } else {
                 //ask for permission
                 activity?.let { activity ->
