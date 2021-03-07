@@ -120,11 +120,11 @@ class FinderFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.registerReceiver()
+        viewModel.registerReceiver(requireContext())
     }
 
     override fun onStop() {
         super.onStop()
-        viewModel.unRegisterReceiver()
+        viewModel.unRegisterReceiver(requireContext())
     }
 }

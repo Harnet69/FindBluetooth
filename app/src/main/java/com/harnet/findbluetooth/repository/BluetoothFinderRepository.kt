@@ -6,7 +6,7 @@ import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
 import javax.inject.Inject
 
-class BluetoothFinderRepository @Inject constructor(private val broadcastHelper: BroadcastHelper) :
+class BluetoothFinderRepository @Inject constructor(val broadcastHelper: BroadcastHelper) :
     BluetoothFinderRepositoryInterface {
     override val mDevicesList = MutableLiveData<ArrayList<Device>>()
 
