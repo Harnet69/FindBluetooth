@@ -26,7 +26,7 @@ class FinderFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel = ViewModelProvider(this).get(FinderViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(FinderViewModel::class.java)
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.finder_fragment, container, false)
 
         return dataBinding.root

@@ -1,31 +1,31 @@
 package com.harnet.findbluetooth.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.harnet.findbluetooth.helper.BroadcastHelper
 import com.harnet.findbluetooth.model.Device
+import javax.inject.Inject
 
-class BluetoothFinderRepository {
-    private val broadcastHelper = BroadcastHelper()
-    val mDevicesList = MutableLiveData<ArrayList<Device>>()
+class BluetoothFinderRepository @Inject constructor(private val broadcastHelper: BroadcastHelper) :
+    BluetoothFinderRepositoryInterface {
+    override val mDevicesList = MutableLiveData<ArrayList<Device>>()
 
     init {
         broadcastHelper.setListener(getBroadcastListener())
     }
 
-    fun searchDevices() {
+    override fun searchDevices() {
         broadcastHelper.searchDevices()
     }
 
-    fun registerReceiver(context: Context) {
+    override fun registerReceiver(context: Context) {
         context.registerReceiver(
             broadcastHelper.broadcastReceiver,
             broadcastHelper.intentFilter
         )
     }
 
-    fun unRegisterReceiver(context: Context) {
+    override fun unRegisterReceiver(context: Context) {
         context.unregisterReceiver(broadcastHelper.broadcastReceiver)
     }
 
@@ -33,7 +33,6 @@ class BluetoothFinderRepository {
     private fun getBroadcastListener(): BroadcastHelper.BroadcastListener {
         return object : BroadcastHelper.BroadcastListener {
             override fun onNewDevices(newDevices: ArrayList<Device>) {
-                Log.i("ActionXXX", "onNewDevices: $newDevices")
                 mDevicesList.value = newDevices
             }
         }

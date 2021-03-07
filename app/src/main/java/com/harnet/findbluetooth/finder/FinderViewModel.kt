@@ -1,14 +1,15 @@
 package com.harnet.findbluetooth.finder
 
 import android.app.Application
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.harnet.findbluetooth.BaseViewModel
 import com.harnet.findbluetooth.model.Device
-import com.harnet.findbluetooth.repository.BluetoothFinderRepository
+import com.harnet.findbluetooth.repository.BluetoothFinderRepositoryInterface
 import kotlinx.coroutines.runBlocking
 
-class FinderViewModel(application: Application) : BaseViewModel(application) {
-    private val bluetoothFinderRepo = BluetoothFinderRepository()
+class FinderViewModel @ViewModelInject constructor(private val bluetoothFinderRepo: BluetoothFinderRepositoryInterface, application: Application) : BaseViewModel(application) {
+//    private val bluetoothFinderRepo = BluetoothFinderRepository()
 
     val mDeviceList = MutableLiveData<ArrayList<Device>>()
     val mIsSearching = MutableLiveData<Boolean>()
@@ -41,17 +42,4 @@ class FinderViewModel(application: Application) : BaseViewModel(application) {
             }
         })
     }
-//    private fun getBroadcastListenerListener(): BroadcastHelper.BroadcastListener {
-//        return object : BroadcastHelper.BroadcastListener {
-//            override fun onNewDevices(newDevices: ArrayList<Device>) {
-//                if (newDevices.isNotEmpty()) {
-//                    mDeviceList.value = newDevices
-//                } else {
-//                    mIsSearching.value = false
-//                    mSearchingError.value = "No device find"
-//                }
-//            }
-//        }
-//    }
-
 }

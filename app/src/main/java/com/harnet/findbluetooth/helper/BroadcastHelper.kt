@@ -7,8 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.harnet.findbluetooth.model.Device
+import javax.inject.Inject
 
-class BroadcastHelper {
+class BroadcastHelper @Inject constructor() {
     var bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
     var intentFilter: IntentFilter = IntentFilter()
     var broadcastReceiver: BroadcastReceiver
